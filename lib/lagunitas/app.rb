@@ -33,6 +33,13 @@ module Lagunitas
       nil
     end
 
+    def uncrushed_icon(size)
+      icons.each do |icon|
+        return icon[:uncrushed_path] if icon[:width] >= size
+      end
+      nil
+    end
+
     def icons
       @icons ||= begin
         icons = []
@@ -50,8 +57,12 @@ module Lagunitas
       path = File.join(@path, "#{name}.png")
       return nil unless File.exist?(path)
 
+      uncrushed_path = File.join(@path, "#{name}_u.png")
+      `xcrun -sdk iphoneos pngcrush -revert-iphone-optimizations -q #{path} #{uncrushed_path}`
+
       {
         path: path,
+        uncrushed_path: uncrushed_path,
         width: `sips -g pixelWidth #{path} | tail -n1 | cut -d" " -f4`.to_i,
         height: `sips -g pixelHeight #{path} | tail -n1 | cut -d" " -f4`.to_i
       }
