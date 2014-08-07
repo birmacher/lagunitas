@@ -14,6 +14,10 @@ module Lagunitas
       @app_path ||= Dir.glob(File.join(contents, 'Payload', '*.app')).first
     end
 
+    def size
+      File.size(@path)
+    end
+
     def cleanup
       return unless @contents
       FileUtils.rm_rf(@contents)

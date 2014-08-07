@@ -10,6 +10,10 @@ module Lagunitas
       @info ||= CFPropertyList.native_types(CFPropertyList::List.new(file: File.join(@path, 'Info.plist')).value)
     end
 
+    def embedded
+      @embedded ||= CFPropertyList.native_types(CFPropertyList::List.new(data: `security cms -D -i #{File.join(@path, 'embedded.mobileprovision')}`).value)
+    end
+
     def identifier
       info['CFBundleIdentifier']
     end
@@ -24,6 +28,18 @@ module Lagunitas
 
     def short_version
       info['CFBundleShortVersionString']
+    end
+
+    def creation_date
+      embedded['CreationDate'].utc
+    end
+
+    def expiration_date
+      embedded['ExpirationDate'].utc
+    end
+
+    def provision_devices
+      embedded['ProvisionedDevices']
     end
 
     def icon(size)
