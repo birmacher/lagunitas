@@ -1,5 +1,4 @@
 require_relative '../3rdparty/cfpropertylist'
-require 'pngdefry'
 
 module Lagunitas
   class App
@@ -51,11 +50,10 @@ module Lagunitas
       path = File.join(@path, "#{name}.png")
       return nil unless File.exist?(path)
 
-      dimensions = Pngdefry.dimensions(path)
       {
         path: path,
-        width: dimensions.first,
-        height: dimensions.last
+        width: `sips -g pixelWidth #{path} | tail -n1 | cut -d" " -f4`.to_i,
+        height: `sips -g pixelHeight #{path} | tail -n1 | cut -d" " -f4`.to_i
       }
     rescue Errno::ENOENT
       nil
