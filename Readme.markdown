@@ -39,7 +39,9 @@ app.provision_devices     #=> [d25facd478d644a646603f91c1bc3edec71c55db, ...]
 # Get an icon path at a specific size
 app.icon(40)              #=> '/absolute/path/to/Icon20x20@2x.png'
 
-It's worth noting that if you get a path to an image in the bundle, it will be crushed with Apple's special PNGCrush. To get the original image use the following
+# It's worth noting that if you get a path to an image in the bundle,
+# it will be crushed with Apple's special PNGCrush.
+# To get the original image use the following
 
 app.uncrushed_icon(40)   #=> '/absolute/path/to/Icon20x20@2x_u.png'
 
