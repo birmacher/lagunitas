@@ -25,6 +25,7 @@ module Lagunitas
 
     def test_icons
       assert_includes @app.icon(120), 'AppIcon60x60@2x.png'
+      assert_includes @app.uncrushed_icon(120), 'AppIcon60x60@2x_u.png'
       assert_nil @app.icon(1024)
     end
 

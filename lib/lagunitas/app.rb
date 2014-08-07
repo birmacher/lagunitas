@@ -1,5 +1,4 @@
-require 'cfpropertylist'
-require 'pngdefry'
+require_relative '../3rdparty/cfpropertylist'
 
 module Lagunitas
   class App
@@ -34,6 +33,13 @@ module Lagunitas
       nil
     end
 
+    def uncrushed_icon(size)
+      icons.each do |icon|
+        return icon[:uncrushed_path] if icon[:width] >= size
+      end
+      nil
+    end
+
     def icons
       @icons ||= begin
         icons = []
@@ -51,11 +57,14 @@ module Lagunitas
       path = File.join(@path, "#{name}.png")
       return nil unless File.exist?(path)
 
-      dimensions = Pngdefry.dimensions(path)
+      uncrushed_path = File.join(@path, "#{name}_u.png")
+      `xcrun -sdk iphoneos pngcrush -revert-iphone-optimizations -q #{path} #{uncrushed_path}`
+
       {
         path: path,
-        width: dimensions.first,
-        height: dimensions.last
+        uncrushed_path: uncrushed_path,
+        width: `sips -g pixelWidth #{path} | tail -n1 | cut -d" " -f4`.to_i,
+        height: `sips -g pixelHeight #{path} | tail -n1 | cut -d" " -f4`.to_i
       }
     rescue Errno::ENOENT
       nil

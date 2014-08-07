@@ -1,4 +1,3 @@
-require 'zip'
 require 'fileutils'
 
 module Lagunitas
@@ -27,13 +26,7 @@ module Lagunitas
       return if @contents
       @contents = "tmp/lagunitas-#{SecureRandom.hex}"
 
-      Zip::ZipFile.open(@path) do |zip_file|
-        zip_file.each do |f|
-          f_path = File.join(@contents, f.name)
-          FileUtils.mkdir_p(File.dirname(f_path))
-          zip_file.extract(f, f_path) unless File.exist?(f_path)
-        end
-      end
+      `unzip #{@path} -d #{@contents}`
 
       @contents
     end
