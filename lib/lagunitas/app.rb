@@ -1,4 +1,4 @@
-require 'cfpropertylist'
+require_relative '../3rdparty/cfpropertylist'
 require 'pngdefry'
 
 module Lagunitas
